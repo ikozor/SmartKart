@@ -1,0 +1,14 @@
+{%extends "base.html"%}
+
+{% block title%} Home {%endblock%}
+
+{%block content%}
+<h1 align="center">Welcome to Smart Kart</h1>
+<br>
+<h2> Search for products:</h2>
+<form class="d-flex" method="POST" action="/search">
+    <input class="form-control" type="text" placeholder="Search (Press the search button to search all -->)" name="search" id="search">
+	<button class="bi bi-search btn btn-success my-2 my-sm-0" type="submit"></button>
+</form>
+
+{% endblock%}

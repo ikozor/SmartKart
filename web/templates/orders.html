@@ -1,0 +1,40 @@
+{%extends "base.html"%}
+
+{% block title%} Orders {%endblock%}
+
+
+{%block content%}
+    <style>
+        .wrapper {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+        }
+    </style>
+    <div class="wrapper">
+    {% for order in orders%}
+        <div class="card text-white bg-secondary mb-3" style="width: 25rem;">
+          <div class="card-body">
+            <h5 class="card-title">Order #{{order[0]}}</h5>
+            <p class="card-text">Date Placed: {{order[1]}}</p>
+            <p>Delivery Status: <b style="color:red;"> Pending Delivery </b></p>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for item in order[2]%}
+                <li class="list-group-item">{{item[0]}} x{{item[1]}}</li>
+            {% endfor %}
+          </ul>
+          <div class="card-body">
+            <form method = "POST" action="/copy_order">
+                <input hidden id="order" name = "order" value="{{order[0]}}">
+                <button type="btn btn-primary" class="btn btn-primary btn-lg btn-block">
+                    Order Again
+                </button>
+            </form>
+          </div>
+        </div>
+
+    {% endfor%}
+    </div>
+
+{% endblock%}

@@ -1,0 +1,122 @@
+{%extends "base.html"%}
+
+{% block title%} Checkout {%endblock%}
+
+{%block content%}
+
+<section class="h-100 gradient-custom">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center my-4">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Cart - {{length}} items</h5>
+          </div>
+          <div class="card-body">
+        {% for product in products %}
+            {% if not product[7] <= 0%}
+            <!-- Single item -->
+            <div class="row">
+
+              <div class="col-lg-8 col-md-6 mb-4 mb-lg-0">
+                <!-- Data -->
+                <p><strong>{{product[2]}}</strong></p>
+                <p>From: {{product[1]}}</p>
+                <p>{{product[4]}} {{product[5]}}</p>
+                <!-- Data -->
+              </div>
+
+              <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <!-- Quantity -->
+                <form method = "POST" action="/checkout">
+                    <div class="d-flex mb-4" style="max-width: 300px">
+                      <button class="bi bi-cart-dash btn btn-primary px-3 me-2"
+                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                      </button>
+
+                      <div class="form-outline">
+                        <input id="quantity" min="0" max="{{product[7]}}" name="quantity" value="{{product[6]}}" type="number" class="form-control" />
+                        <label class="form-label" for="form1">Quantity</label>
+                        <input hidden id="product_id" name = "product_id" value="{{product[0]}}">
+                      </div>
+
+                      <button class="bi bi-cart-plus btn btn-primary px-3 ms-2 "
+                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                      </button>
+                    </div>
+                </form>
+                <!-- Quantity -->
+
+                <!-- Price -->
+
+                <p class="text-start text-md-center">
+                  <strong>${{product[3] * product[6]}}</strong>
+                </p>
+                <!-- Price -->
+              </div>
+            </div>
+            <!-- Single item -->
+
+            <hr class="my-4" />
+            {% endif%}
+        {% endfor %}
+          </div>
+        </div>
+        {% if length > 0 %}
+        <div class="card mb-4">
+          <div class="card-body">
+            <p><strong>Expected shipping delivery</strong></p>
+            <p class="mb-0">Tomorrow - 8:00pm</p>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% if length > 0 %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Summary</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+                {% for product in products %}
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                {{product[2]}} x{{product[6]}}
+                <span>${{product[3] * product[6]}}</span>
+              </li>
+                {% endfor %}
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Shipping
+                <span>$--.--</span>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                <div>
+                  <strong>Total amount</strong>
+                </div>
+                <span><strong>${{sum}}</strong></span>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                <div>
+                  <strong>Deliver To: </strong>
+                </div>
+                <span><strong>{{zipcode}}</strong></span>
+              </li>
+            </ul>
+
+            <form method = "POST" action="/order_placed">
+                <button type="btn btn-primary" class="btn btn-primary btn-lg btn-block">
+                Order Items
+            </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock%}
